@@ -1,5 +1,3 @@
-const table = document.getElementById("table");
-const result = [];
 const isPrime = (num) => {
   if (num <= 1) return false;
   if (num <= 3) return true;
@@ -9,7 +7,23 @@ const isPrime = (num) => {
   }
   return true;
 };
+const addResultRow = (number, isPrimeResult, executionTime) => {
+  const resultTableBody = document.getElementById("table");
+  const newRow = document.createElement("tr");
+  const numberCell = document.createElement("td");
+  numberCell.textContent = number;
+  newRow.appendChild(numberCell);
+  const isPrimeCell = document.createElement("td");
+  isPrimeCell.textContent = isPrimeResult ? "Prime" : "Not Prime";
+  newRow.appendChild(isPrimeCell);
+  const executionTimeCell = document.createElement("td");
+  executionTimeCell.textContent = executionTime.toFixed(4);
+  newRow.appendChild(executionTimeCell);
+  resultTableBody.appendChild(newRow);
+};
 const numbersInRange = (start, end) => {
+  const resultTableBody = document.getElementById("table");
+  resultTableBody.innerHTML = "";
   if (start >= end) {
     alert("Start Should be lesser than end");
   } else {
@@ -18,20 +32,13 @@ const numbersInRange = (start, end) => {
       const isPrimeResult = isPrime(number);
       const endTime = performance.now();
       const executionTime = endTime - startTime;
-      result.push({
-        number: number,
-        isPrimeResult: isPrimeResult,
-        executionTime: executionTime,
-      });
+      addResultRow(number, isPrimeResult, executionTime);
     }
-    console.log(result);
   }
 };
-document
-  .getElementById("form")
-  .addEventListener("submit", function (event) {
-    event.preventDefault();
-    const endrange = document.getElementById("endrange").value;
-    const startrange = document.getElementById("startrange").value;
-    numbersInRange(startrange, endrange);
-  });
+document.getElementById("form").addEventListener("submit", function (event) {
+  event.preventDefault();
+  const endrange = document.getElementById("endrange").value;
+  const startrange = document.getElementById("startrange").value;
+  numbersInRange(parseInt(startrange), parseInt(endrange));
+});
